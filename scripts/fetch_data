@@ -1,0 +1,67 @@
+#!usr/bin/python
+
+import numpy as np
+import argparse
+import subprocess
+import sys
+import os
+
+sys.path.append('..')
+from panstarrs import *
+from astropy.visualization import ZScaleInterval
+
+parser = argparse.ArgumentParser(description="""query PanSTARRS multi-band
+                images of Kepler/K2/TESS targets using panstamps""",
+                usage='use "%(prog)s --help" for more information',
+                formatter_class=argparse.RawTextHelpFormatter)
+parser.add_argument('epic', help='EPIC ID of target star (e.g. 211319617)',
+                  type=int)
+parser.add_argument('-r', '--rad', help='aperture radius in arcmin (default=1)',
+    type=float, default=1)
+parser.add_argument('-f', '--fil', help='panstarrs filters (default=grizy)',
+    type=str, default='grizy')
+parser.add_argument('-o', '--opt', help="""options (default=fJC; see \nhttps://github.com/thespacedoctor/panstamps)""",
+    type=str, default='fJC')
+parser.add_argument('-s', '--showfig', help='show downloaded images (True/False) using `panstarrs.inspect_data`', default=False)
+parser.add_argument('-t', '--type', help='image type (stack|warp)',
+                    default='stack')
+
+args = parser.parse_args()
+epic = int(args.epic)
+rad = args.rad
+filters = args.fil
+options = args.opt
+image_type= args.type
+showfig= args.showfig
+
+if sys.version_info[0] > 2:
+  raise "Must be using Python 2.x"
+
+ra, dec = get_ra_dec(epic,verbose=True)
+
+print('\n-----EPIC {}-----\n'.format(epic))
+
+#rename folder
+newfoldername = str(epic)+'_'+str(filters)
+if not os.path.isdir(newfoldername):
+    #download
+    #!panstamps --fJC --width=1 --filters=$filters $image_type $ra $dec
+    command1 = "panstamps -{} --width={} --filters={} {} {} {}".format(
+                                    options, rad, filters, image_type, ra, dec)
+    subprocess.call(command1, shell=True)
+    try:
+        foldername='{}m{}'.format(ra,dec)
+        foldername = foldername.replace(':','').replace('-','')
+        os.rename(foldername,newfoldername)
+    except:
+        foldername='{}p{}'.format(ra,dec)
+        foldername = foldername.replace(':','').replace('-','')
+        newfoldername = str(epic)+'_'+str(filters)
+        os.rename(foldername,newfoldername)
+
+if showfig:
+  #see panstarrs/inspect_data for details
+  command2= 'inspect_data {} {} -m'.format(epic,newfoldername)
+  subprocess.call(command2,shell=True)
+
+print('\n-----Done-----\n')
