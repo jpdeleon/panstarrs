@@ -92,7 +92,7 @@ def plot(img,hdr,epic,rad,aperture,kwargs,show_centroid=True):
     filter = hdr['HIERARCH FPA.FILTER']
     band = filter.split('.')[0]
 
-    ax.imshow(img, vmin=zmin, vmax=zmax)
+    ax.imshow(img, origin='bottom', vmin=zmin, vmax=zmax)
     if aperture is not None:
         assert aperture.size == img.size
         ax.matshow(aperture, cmap=cmap, alpha=0.1, label='K2 aperture')
@@ -135,7 +135,7 @@ def plot_multi(file_list,epic,kwargs,aperture=None,show_centroid=True):
         interval = ZScaleInterval(contrast=contrast)
         zmin,zmax = interval.get_limits(img)
 
-        ax[n].imshow(img,label='${}$'.format(band), cmap='gray', vmin=zmin, vmax=zmax)
+        ax[n].imshow(img,origin='bottom',label='${}$'.format(band), cmap='gray', vmin=zmin, vmax=zmax)
         ax[n].yaxis.set_major_locator(pl.NullLocator())
         ax[n].xaxis.set_major_formatter(pl.NullFormatter())
         xpos,ypos=textloc
@@ -191,7 +191,7 @@ def plot_epics(ids, kwargs=None):
             #get limits
             zmin,zmax = interval.get_limits(img)
 
-            ax[m,n].imshow(img,label='${}$'.format(band), cmap=cmap, vmin=zmin, vmax=zmax)
+            ax[m,n].imshow(img,origin='bottom',label='${}$'.format(band), cmap=cmap, vmin=zmin, vmax=zmax)
             ax[m,2].set_title('{}'.format(epic),fontsize=fontsize, pad=pad)
             ax[m,n].yaxis.set_major_locator(pl.NullLocator())
             ax[m,n].xaxis.set_major_formatter(pl.NullFormatter())

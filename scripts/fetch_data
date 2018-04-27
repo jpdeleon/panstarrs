@@ -10,8 +10,7 @@ sys.path.append('..')
 from panstarrs import *
 from astropy.visualization import ZScaleInterval
 
-parser = argparse.ArgumentParser(description="""query PanSTARRS multi-band
-                images of Kepler/K2/TESS targets using panstamps""",
+parser = argparse.ArgumentParser(description="""query PanSTARRS multi-band images of Kepler/K2/TESS targets using panstamps""",
                 usage='use "%(prog)s --help" for more information',
                 formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument('epic', help='EPIC ID of target star (e.g. 211319617)',
