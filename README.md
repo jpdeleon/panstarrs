@@ -16,8 +16,7 @@ $ conda create new -s py2 python=2.7 && source activate py2
 ```shell
 (py2) $ fetch_data --help
 
-query PanSTARRS multi-band
-                images of Kepler/K2/TESS targets using panstamps
+query PanSTARRS multi-band images of Kepler/K2/TESS targets using panstamps
 
 positional arguments:
   epic                  EPIC ID of target star (e.g. 211319617)
@@ -72,5 +71,5 @@ optional arguments:
 ```
 
 ## To do: 
-1. add custom K2 aperture used in photometry (currently using circular aperture)
+1. add custom K2 aperture used in photometry (currently using circular aperture) by supplying the ax argument in the function 
 2. fix bug in panstarrs.plot_epics

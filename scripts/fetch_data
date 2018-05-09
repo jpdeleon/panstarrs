@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(description="""query PanSTARRS multi-band image
                 formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument('epic', help='EPIC ID of target star (e.g. 211319617)',
                   type=int)
-parser.add_argument('-r', '--rad', help='aperture radius in arcmin (default=1)',
+parser.add_argument('-w', '--width', help='image FOV in arcmin (default=1)',
     type=float, default=1)
 parser.add_argument('-f', '--fil', help='panstarrs filters (default=grizy)',
     type=str, default='grizy')
@@ -27,7 +27,7 @@ parser.add_argument('-t', '--type', help='image type (stack|warp)',
 
 args = parser.parse_args()
 epic = int(args.epic)
-rad = args.rad
+width = args.width
 filters = args.fil
 options = args.opt
 image_type= args.type
@@ -46,7 +46,7 @@ if not os.path.isdir(newfoldername):
     #download
     #!panstamps --fJC --width=1 --filters=$filters $image_type $ra $dec
     command1 = "panstamps -{} --width={} --filters={} {} {} {}".format(
-                                    options, rad, filters, image_type, ra, dec)
+                                    options, width, filters, image_type, ra, dec)
     subprocess.call(command1, shell=True)
     try:
         foldername='{}m{}'.format(ra,dec)
